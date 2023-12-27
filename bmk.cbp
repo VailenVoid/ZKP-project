@@ -34,7 +34,6 @@
 		</Compiler>
 		<Unit filename="main.cpp" />
 		<Unit filename="sha256.h" />
-		<Unit filename="test.cpp" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

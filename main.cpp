@@ -1,120 +1,101 @@
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <iomanip>
-#include "sha256.h"
 #include <bits/stdc++.h>
+#include "sha256.h"
 
 
 using namespace std;
 
-
+///DELETE THIS
+string sha255(string a)
+{
+    return a;
+}
+///DELETE THIS
 
 class merkleNode
 {
-private:
-
+protected:
+    merkleNode *l,*r;
+    string hsh;
 
 public:
-    merkleNode* levi;
-    merkleNode* desni;
-    string text;
-    merkleNode(string t)
+    merkleNode(string _hsh) //leaf
     {
-        text=t;
-        levi=NULL;
-        desni=NULL;
-    }
-    merkleNode(merkleNode *l, merkleNode *d)
-    {
-        string s1="",s2="";
-        if(l!=NULL) s1=(*l).t();
-        if(d!=NULL) s2=(*d).t();
-        text=sha256(s1+s2);
-        levi=l;
-        desni=d;
-    }
-    string t()
-    {
-        return text;
-    }
-    merkleNode * l()
-    {
-        return levi;
-    }
-    merkleNode * d()
-    {
-        return desni;
-    }
-    merkleNode rootpom(vector<merkleNode> niz)
-    {
-
-
-        int n=niz.size();
-        cout<<"jebiga";
-        cout<<n<<endl;
-        if(niz.size()==2)
-        {
-            merkleNode goof1=niz[0];
-            merkleNode goof2=niz[1];
-            merkleNode res(&goof1,&goof2);
-            cout<<"dosao do roota"<<endl;
-            return res;
-        }
-        vector<merkleNode> pom;
-        for(int i=0;i<n/2;i++)
-        {
-            merkleNode pom2(&niz[2*i],&niz[2*i+1]);
-            pom.push_back(pom2);
-        }
-        if(n%2!=0)
-        {
-            cout<<"govnarii"<<endl;
-            merkleNode pom2(&niz[n-1],NULL);
-            pom.push_back(pom2);
-        }
-        cout<<"ide smraad"<<endl;
-        merkleNode res=rootpom(pom);
-        cout<<"smakored"<<endl;
-        return res;
-    }
-    merkleNode(vector<string> niz)
-    {
-        int n=niz.size();
-        vector<merkleNode> pom;
-        for(int i=0;i<n;i++)
-        {
-            merkleNode pom1(sha256(niz[i]));
-            pom.push_back(pom1);
-        }
-        merkleNode res=rootpom(pom);
-        text=res.t();
-        levi=(res.l());
-
-        desni=(res.d());
+        l=NULL,r=NULL,hsh=_hsh;
     }
 
-    void Prikaz()
+    merkleNode(merkleNode *L, merkleNode *R) //non-leaf
     {
-        cout<<text;
-        cout<<"\n ovo je ovaj, a nodovi govani su mu deca evo: \n";
-       // if(levi!=NULL) cout<<(levi->t()); else cout<<"bio null";
-        cout<<"\n";/*
-        cout << (*desni).t()<<endl;*/
-        cout<<"govno jedno veliko usrano da bog da mu sve crklo";
-        return;
+        hsh=sha255(L->hsh+R->hsh); ///CHANGE THIS TO sha256
+        l=L,r=R;
     }
+
+private:
+    merkleNode(vector<string> &niz, int ll, int rr)
+    {
+        if (ll==rr) *this=merkleNode(niz[ll]);
+        else
+        {
+            int mid=(ll+rr)/2;
+            *this = merkleNode(new merkleNode(niz,ll,mid),new merkleNode(niz,mid+1,rr));
+        }
+    }
+public:
+    merkleNode(vector<string> &niz)
+    {
+        *this = merkleNode(niz,0,(int)niz.size()-1);
+    }
+
+    string getHash()
+    {
+        return hsh;
+    }
+
+    merkleNode * getLeftChild()
+    {
+        return l;
+    }
+
+    merkleNode * getRightChild()
+    {
+        return r;
+    }
+
 };
+
+void printMerkle(merkleNode *root)
+{
+    queue<pair<merkleNode*,int>> bfs;
+    bfs.push({root,0});
+
+    int td=-1;
+    while (!bfs.empty())
+    {
+        auto p=bfs.front().first;
+        int d=bfs.front().second;
+        bfs.pop();
+        if (td!=d)
+        {
+            cout<<"\n";
+            td=d;
+        }
+        cout<<p->getHash()<<" ";
+
+        if (p->getLeftChild()) bfs.push({p->getLeftChild(),d+1});
+        if (p->getRightChild()) bfs.push({p->getRightChild(),d+1});
+    }
+
+    cout<<endl;
+}
 
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    vector<string> niz={ "00", "01", "02", "03" };
+
+    vector<string> niz={ "00", "01", "02", "03", "04", "05", "06" };
     merkleNode dummy("grr");
     merkleNode sr(niz);
-    sr.Prikaz();
+    printMerkle(&sr);
 
-    cout << "Hello world!" << endl;
     return 0;
 }
