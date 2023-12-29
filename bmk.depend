@@ -1,0 +1,20 @@
+# depslib dependency file v1.0
+1703668025 source:c:\users\aleksandar\zkp-project\main.cpp
+	<bits/stdc++.h>
+	"sha256.h"
+
+1703649807 c:\users\aleksandar\zkp-project\sha256.h
+	<string>
+
+1703864362 source:c:\users\aleksandar\zkp-project\merkletree.cpp
+	<bits/stdc++.h>
+	"sha256.h"
+
+1703865370 source:c:\users\aleksandar\zkp-project\benchmarks.cpp
+	<bits/stdc++.h>
+	"merkletree.h"
+
+1703865462 c:\users\aleksandar\zkp-project\merkletree.h
+	<bits/stdc++.h>
+	"sha256.h"
+

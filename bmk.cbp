@@ -32,7 +32,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="main.cpp" />
+		<Unit filename="benchmarks.cpp" />
+		<Unit filename="merkletree.h" />
 		<Unit filename="sha256.h" />
 		<Extensions />
 	</Project>
